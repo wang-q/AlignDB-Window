@@ -1,0 +1,11 @@
+Revision history for {{ $dist->name }}: {{ $dist->version }}
+
+{{ $NEXT }}
+       Prevent outside_window out of align range
+
+0.01   Thu Nov 27 16:12:43 2008
+       Switch to Dist::Zilla
+
+0.001  Tue Jan  8 03:54:56 2008
+       Initial release.
+
