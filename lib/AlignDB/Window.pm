@@ -1,4 +1,5 @@
 package AlignDB::Window;
+
 # ABSTRACT: Split integer spans into a series of windows
 
 use Moose;
@@ -57,9 +58,6 @@ has 'max_in_distance' => ( is => 'rw', isa => 'Int', default => 5, );
             : $interval_end     : end position of the interval
             : $window_size      : size of windows
             : $minimal_interval : minimal size of intervals
-     Throws : no exceptions
-   Comments : none 
-   See Also : interval_window_2
 
 =cut
 
@@ -245,9 +243,6 @@ sub interval_window {
             : $interval_end     : end position of the interval
             : $window_size      : size of windows
             : $minimal_interval : minimal size of intervals
-     Throws : no exceptions
-   Comments : none 
-   See Also : interval_window
 
 =cut
 
@@ -337,8 +332,7 @@ sub interval_window_2 {
             $window_start = $window_end - $window_size + 1;
         }
 
-        $window_info{set}
-            = $interval_set->slice( $window_start, $window_end );
+        $window_info{set} = $interval_set->slice( $window_start, $window_end );
         $window_info{distance} = $half_windows_number + 1;
         $window_info{density}  = $density;
 
@@ -364,9 +358,6 @@ sub interval_window_2 {
             : $interval_end     : end position of the interval
             : $window_size      : size of windows
             : $maximal_distance : maximal distance
-     Throws : no exceptions
-   Comments : none 
-   See Also : interval_window, interval_window_2, inside_window
 
 =cut
 
@@ -385,11 +376,9 @@ sub outside_window {
 
     foreach my $sw_type (qw/L R/) {
 
-        # $sw_start and $sw_end are both index of $target_set
+        # $sw_start and $sw_end are both index of $comparable_set
         my ( $sw_start, $sw_end );
 
-        # If gene_set containing promoter or terminator sequences,
-        #   use transcript start or end as gene start or end
         if ( $sw_type eq 'R' ) {
             $sw_start = $comparable_set->index($internal_end) + 1;
             $sw_end   = $sw_start + $window_size - 1;
@@ -399,7 +388,7 @@ sub outside_window {
             $sw_start = $sw_end - $window_size + 1;
         }
 
-        # $gsw_distance is from 1 to $sw_max_distance
+        # $sw_distance is from 1 to $sw_max_distance
     OUTSIDESW: foreach my $sw_distance ( 1 .. $maximal_distance ) {
             last if $sw_start < 1;
             last if $sw_end > $comparable_number;
@@ -446,9 +435,6 @@ sub outside_window {
             : $interval_end     : end position of the interval
             : $window_size      : size of windows
             : $maximal_distance : maximal distance
-     Throws : no exceptions
-   Comments : none 
-   See Also : interval_window, interval_window_2, inside_window
 
 =cut
 
@@ -469,11 +455,9 @@ sub outside_window_2 {
 
     foreach my $sw_type (qw/L R/) {
 
-        # $sw_start and $sw_end are both index of $target_set
+        # $sw_start and $sw_end are both index of $comparable_set
         my ( $sw_start, $sw_end );
 
-        # If gene_set containing promoter or terminator sequences,
-        #   use transcript start or end as gene start or end
         if ( $sw_type eq 'R' ) {
             $sw_start = $comparable_set->index($internal_end) + 1;
             $sw_end   = $sw_start + $window0_size - 1;
@@ -530,9 +514,6 @@ sub outside_window_2 {
             : $interval_end     : end position of the interval
             : $window_size      : size of windows
             : $maximal_distance : maximal distance
-     Throws : no exceptions
-   Comments : none 
-   See Also : interval_window, interval_window_2, outside_window
 
 =cut
 
@@ -551,7 +532,7 @@ sub inside_window {
 
     foreach my $sw_type (qw/l r/) {
 
-        # $sw_start and $sw_end are both index of $target_set
+        # $sw_start and $sw_end are both index of $comparable_set
         my ( $sw_start, $sw_end );
 
         my $working_set
@@ -569,8 +550,7 @@ sub inside_window {
             $sw_end   = $sw_start + $window_size - 1;
         }
 
-        my $available_distance
-            = int( $working_length / ( $window_size * 2 ) );
+        my $available_distance = int( $working_length / ( $window_size * 2 ) );
         my $max_distance = min( $available_distance, $maximal_distance );
 
         # sw_distance is from -1 to -max_distance
@@ -619,9 +599,6 @@ sub inside_window {
             : $interval_end     : end position of the interval
             : $window_size      : size of windows
             : $maximal_distance : maximal distance
-     Throws : no exceptions
-   Comments : none 
-   See Also : interval_window, interval_window_2, outside_window
 
 =cut
 
@@ -640,7 +617,7 @@ sub inside_window2 {
 
     foreach my $sw_type (qw/l r/) {
 
-        # $sw_start and $sw_end are both index of $target_set
+        # $sw_start and $sw_end are both index of $comparable_set
         my ( $sw_start, $sw_end );
 
         my $working_set
@@ -658,8 +635,7 @@ sub inside_window2 {
             $sw_start = $sw_end - $window_size + 1;
         }
 
-        my $available_distance
-            = int( $working_length / ( $window_size * 2 ) );
+        my $available_distance = int( $working_length / ( $window_size * 2 ) );
         my $max_distance = min( $available_distance, $maximal_distance );
 
         # sw_distance is from -90 to -90 + max_distance - 1
@@ -690,6 +666,122 @@ sub inside_window2 {
     }
 
     return @inside_windows;
+}
+
+=method center_window
+
+      Usage : $self->outside_window_2(
+            :     $comparable_set, $interval_start, $interval_end,
+            :     $window_size, $maximal_distance,
+            : );
+    Purpose : draw windows for a certain region, center is 0, and 
+            : the first window is 50 bp and all others are 100 bp length
+            : start from 0 and end to $maximal_distance
+    Returns : @outside_windows
+            : each member is a hash_ref
+ Parameters : $comparable_set   : AlignDB::IntSpan object
+            : $interval_start   : start position of the interval
+            : $interval_end     : end position of the interval
+            : $window_size      : size of windows
+            : $maximal_distance : maximal distance
+
+=cut
+
+sub center_window {
+    my ( $self, $comparable_set, $internal_start, $internal_end, $window_size,
+        $maximal_distance )
+        = @_;
+
+    # if undefined, set to default values
+    $window_size      ||= $self->sw_size;
+    $maximal_distance ||= $self->max_out_distance;
+
+    my $comparable_number = $comparable_set->cardinality;
+
+    my @center_windows;
+
+    my $original_set = AlignDB::IntSpan->new("$internal_start-$internal_end");
+    my $window0_set
+        = _center_resize( $original_set, $comparable_set, $window_size );
+    my $window0_start = $window0_set->min;
+    my $window0_end   = $window0_set->max;
+    push @center_windows,
+        {
+        type     => 'M',
+        set      => $window0_set,
+        distance => 0,
+        };
+
+    for my $sw_type (qw{L R}) {
+
+        # $sw_start and $sw_end are both index of $comparable_set
+        my ( $sw_start, $sw_end );
+
+        if ( $sw_type eq 'R' ) {
+            $sw_start = $comparable_set->index($window0_end) + 1;
+            $sw_end   = $sw_start + $window_size - 1;
+        }
+        elsif ( $sw_type eq 'L' ) {
+            $sw_end   = $comparable_set->index($window0_start) - 1;
+            $sw_start = $sw_end - $window_size + 1;
+        }
+
+        # $sw_distance is from 1 to $maximal_distance
+    CENTERSW: for my $sw_distance ( 1 .. $maximal_distance ) {
+            last if $sw_start < 1;
+            last if $sw_end > $comparable_number;
+            my $sw_set = $comparable_set->slice( $sw_start, $sw_end );
+            my $sw_set_member_number = $sw_set->cardinality;
+            if ( $sw_set_member_number < $window_size ) {
+                last CENTERSW;
+            }
+
+            push @center_windows,
+                {
+                type     => $sw_type,
+                set      => $sw_set,
+                distance => $sw_distance,
+                };
+
+            if ( $sw_type eq 'R' ) {
+                $sw_start = $sw_end + 1;
+                $sw_end   = $sw_start + $window_size - 1;
+            }
+            elsif ( $sw_type eq 'L' ) {
+                $sw_end   = $sw_start - 1;
+                $sw_start = $sw_end - $window_size + 1;
+            }
+        }
+    }
+
+    return @center_windows;
+}
+
+sub _center_resize {
+    my $old_set    = shift;
+    my $parent_set = shift;
+    my $resize     = shift;
+
+    # find the middles of old_set
+    my $half_size           = int( $old_set->size / 2 );
+    my $midleft             = $old_set->at($half_size);
+    my $midright            = $old_set->at( $half_size + 1 );
+    my $midleft_parent_idx  = $parent_set->index($midleft);
+    my $midright_parent_idx = $parent_set->index($midright);
+
+    return unless $midleft_parent_idx and $midright_parent_idx;
+
+    # map to parent
+    my $parent_size  = $parent_set->size;
+    my $half_resize  = int( $resize / 2 );
+    my $new_left_idx = $midleft_parent_idx - $half_resize + 1;
+    $new_left_idx = 1 if $new_left_idx < 1;
+    my $new_right_idx = $midright_parent_idx + $half_resize - 1;
+    $new_right_idx = $parent_size if $new_right_idx > $parent_size;
+
+    my $new_set = $parent_set->slice( $new_left_idx, $new_right_idx );
+
+    return $new_set;
 }
 
 1;    # Magic true value required at end of module
