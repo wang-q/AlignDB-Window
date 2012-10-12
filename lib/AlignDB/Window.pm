@@ -700,9 +700,21 @@ sub center_window {
 
     my @center_windows;
 
-    my $original_set = AlignDB::IntSpan->new("$internal_start-$internal_end");
+    my $original_set;
+    if ( $internal_start < $internal_end ) {
+        $original_set = AlignDB::IntSpan->new("$internal_start-$internal_end");
+    }
+    elsif ( $internal_start == $internal_end ) {
+        $original_set = AlignDB::IntSpan->new($internal_start);
+    }
+    else {
+        return;
+    }
+
     my $window0_set
         = _center_resize( $original_set, $comparable_set, $window_size );
+    return unless $window0_set;
+
     my $window0_start = $window0_set->min;
     my $window0_end   = $window0_set->max;
     push @center_windows,
