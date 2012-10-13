@@ -796,6 +796,115 @@ sub _center_resize {
     return $new_set;
 }
 
+=method center_intact_window
+
+      Usage : $self->outside_window_2(
+            :     $comparable_set, $interval_start, $interval_end,
+            :     $window_size, $maximal_distance,
+            : );
+    Purpose : draw windows for a certain region, center is 0, and 
+            : the first window is 50 bp and all others are 100 bp length
+            : start from 0 and end to $maximal_distance
+    Returns : @outside_windows
+            : each member is a hash_ref
+ Parameters : $comparable_set   : AlignDB::IntSpan object
+            : $interval_start   : start position of the interval
+            : $interval_end     : end position of the interval
+            : $window_size      : size of windows
+            : $maximal_distance : maximal distance
+
+=cut
+
+sub center_intact_window {
+    my ( $self, $comparable_set, $internal_start, $internal_end, $window_size,
+        $maximal_distance )
+        = @_;
+
+    # if undefined, set to default values
+    $window_size      ||= $self->sw_size;
+    $maximal_distance ||= $self->max_out_distance;
+
+    my $comparable_number = $comparable_set->cardinality;
+
+    my @center_windows;
+
+    my $original_set;
+    if ( $internal_start < $internal_end ) {
+        $original_set = AlignDB::IntSpan->new("$internal_start-$internal_end");
+    }
+    elsif ( $internal_start == $internal_end ) {
+        $original_set = AlignDB::IntSpan->new($internal_start);
+    }
+    else {
+        return;
+    }
+
+    my $window0_set;
+    if ( $original_set->size < $window_size ) {
+        $window0_set
+            = _center_resize( $original_set, $comparable_set, $window_size );
+    }
+    else {
+        $window0_set = $original_set->intersect($comparable_set);
+    }
+
+    return unless $window0_set;
+    return unless $window0_set->size;
+
+    my $window0_start = $window0_set->min;
+    my $window0_end   = $window0_set->max;
+    push @center_windows,
+        {
+        type     => 'M',
+        set      => $window0_set,
+        distance => 0,
+        };
+
+    for my $sw_type (qw{L R}) {
+
+        # $sw_start and $sw_end are both index of $comparable_set
+        my ( $sw_start, $sw_end );
+
+        if ( $sw_type eq 'R' ) {
+            $sw_start = $comparable_set->index($window0_end) + 1;
+            $sw_end   = $sw_start + $window_size - 1;
+        }
+        elsif ( $sw_type eq 'L' ) {
+            $sw_end   = $comparable_set->index($window0_start) - 1;
+            $sw_start = $sw_end - $window_size + 1;
+        }
+
+        # $sw_distance is from 1 to $maximal_distance
+    CENTERINTACTSW: for my $sw_distance ( 1 .. $maximal_distance ) {
+            last if $sw_start < 1;
+            last if $sw_end > $comparable_number;
+            my $sw_set = $comparable_set->slice( $sw_start, $sw_end );
+            my $sw_set_member_number = $sw_set->cardinality;
+            if ( $sw_set_member_number < $window_size ) {
+                last CENTERINTACTSW;
+            }
+
+            push @center_windows,
+                {
+                type     => $sw_type,
+                set      => $sw_set,
+                distance => $sw_distance,
+                };
+
+            if ( $sw_type eq 'R' ) {
+                $sw_start = $sw_end + 1;
+                $sw_end   = $sw_start + $window_size - 1;
+            }
+            elsif ( $sw_type eq 'L' ) {
+                $sw_end   = $sw_start - 1;
+                $sw_start = $sw_end - $window_size + 1;
+            }
+        }
+    }
+
+    return @center_windows;
+}
+
 1;    # Magic true value required at end of module
 
 __END__
