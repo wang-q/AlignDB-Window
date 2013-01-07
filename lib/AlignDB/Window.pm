@@ -3,7 +3,6 @@ package AlignDB::Window;
 # ABSTRACT: Split integer spans into a series of windows
 
 use Moose;
-use Carp;
 
 use List::Util qw(first max maxstr min minstr reduce shuffle sum);
 use YAML qw(Dump Load DumpFile LoadFile);
@@ -16,7 +15,7 @@ sliding windows' size, default is 100
 
 =cut
 
-has 'sw_size' => ( is => 'rw', isa => 'Int', default => 100, );
+has 'sw_size' => ( is => 'rw', isa => 'Int', default => sub {100}, );
 
 =attr min_interval
 
@@ -24,7 +23,7 @@ mininal indel interval length, default is 11
 
 =cut
 
-has 'min_interval' => ( is => 'rw', isa => 'Int', default => 11, );
+has 'min_interval' => ( is => 'rw', isa => 'Int', default => sub {11}, );
 
 =attr max_out_distance
 
@@ -32,7 +31,7 @@ maximal outside distance, default is 10
 
 =cut
 
-has 'max_out_distance' => ( is => 'rw', isa => 'Int', default => 10, );
+has 'max_out_distance' => ( is => 'rw', isa => 'Int', default => sub {10}, );
 
 =attr max_in_distance
 
@@ -40,7 +39,7 @@ maximal inside distance, default is 5
 
 =cut
 
-has 'max_in_distance' => ( is => 'rw', isa => 'Int', default => 5, );
+has 'max_in_distance' => ( is => 'rw', isa => 'Int', default => sub {5}, );
 
 =method interval_window
 
