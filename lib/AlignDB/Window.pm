@@ -774,12 +774,21 @@ sub _center_resize {
     my $resize     = shift;
 
     # find the middles of old_set
-    my $half_size           = int( $old_set->size / 2 );
-    my $midleft             = $old_set->at($half_size);
-    my $midright            = $old_set->at( $half_size + 1 );
-    my $midleft_parent_idx  = $parent_set->index($midleft);
-    my $midright_parent_idx = $parent_set->index($midright);
-
+    my ( $midleft_parent_idx, $midright_parent_idx );
+    {
+        if ( $old_set->size == 1 ) {
+            my $mid = $old_set->at(1);
+            $midleft_parent_idx  = $parent_set->index($mid);
+            $midright_parent_idx = $parent_set->index($mid);
+        }
+        else {
+            my $half_size = int( $old_set->size / 2 );
+            my $midleft   = $old_set->at($half_size);
+            my $midright  = $old_set->at( $half_size + 1 );
+            $midleft_parent_idx  = $parent_set->index($midleft);
+            $midright_parent_idx = $parent_set->index($midright);
+        }
+    }
     return unless $midleft_parent_idx and $midright_parent_idx;
 
     # map to parent
@@ -902,6 +911,94 @@ sub center_intact_window {
     }
 
     return @center_windows;
+}
+
+=method strand_window
+
+      Usage : $self->strand_window(
+            :     $comparable_set, $interval_start, $interval_end,
+            :     $window_size, $strand,
+            : );
+    Purpose : draw windows for a certain region
+    Returns : @windows
+            : each member is a hash_ref
+ Parameters : $comparable_set   : AlignDB::IntSpan object
+            : $interval_start   : start position of the interval
+            : $interval_end     : end position of the interval
+            : $window_size      : size of windows
+            : $strand           : '+' or '-'
+
+=cut
+
+sub strand_window {
+    my ( $self, $comparable_set, $internal_start, $internal_end, $window_size,
+        $strand )
+        = @_;
+
+    # if undefined, set to default values
+    $window_size ||= $self->sw_size;
+    $strand ||= '+';
+
+    my $comparable_number = $comparable_set->cardinality;
+
+    my @windows;
+
+    my $working_set;
+    if ( $internal_start < $internal_end ) {
+        $working_set
+            = $comparable_set->intersect("$internal_start-$internal_end");
+    }
+    else {
+        return @windows;
+    }
+
+    my $working_length = $working_set->cardinality;
+    return @windows if $working_length < $window_size;
+
+    # $sw_start and $sw_end are both index of $comparable_set
+    my ( $sw_start, $sw_end );
+
+    if ( $strand eq '+' ) {
+        $sw_start = 1;
+        $sw_end   = $sw_start + $window_size - 1;
+    }
+    elsif ( $strand eq '-' ) {
+        $sw_end   = $working_set->cardinality;
+        $sw_start = $sw_end - $window_size + 1;
+    }
+    else {
+        return @windows;
+    }
+
+    my $available_distance = int( $working_length / ($window_size) );
+
+    # sw_distance is from 1 to max_distance
+STRANDSW: for my $i ( 1 .. $available_distance ) {
+        my $sw_set = $working_set->slice( $sw_start, $sw_end );
+        my $sw_set_member_number = $sw_set->cardinality;
+        if ( $sw_set_member_number < $window_size ) {
+            last STRANDSW;
+        }
+        my $sw_distance = $i;
+
+        my %window_info;
+        $window_info{type}     = $strand;
+        $window_info{set}      = $sw_set;
+        $window_info{distance} = $sw_distance;
+
+        push @windows, \%window_info;
+
+        if ( $strand eq '+' ) {
+            $sw_start = $sw_end + 1;
+            $sw_end   = $sw_start + $window_size - 1;
+        }
+        elsif ( $strand eq '-' ) {
+            $sw_end   = $sw_start - 1;
+            $sw_start = $sw_end - $window_size + 1;
+        }
+    }
+
+    return @windows;
 }
 
 1;    # Magic true value required at end of module
