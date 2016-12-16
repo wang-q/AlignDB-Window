@@ -4,7 +4,7 @@ use List::Util qw(first max maxstr min minstr reduce shuffle sum);
 use YAML qw(Dump Load DumpFile LoadFile);
 use AlignDB::IntSpan;
 
-our $VERSION = '1.0.0';
+our $VERSION = '1.0.1';
 
 has 'sw_size'          => ( is => 'rw', isa => 'Int', default => sub {100}, );
 has 'min_interval'     => ( is => 'rw', isa => 'Int', default => sub {11}, );
