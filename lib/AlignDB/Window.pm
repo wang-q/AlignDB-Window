@@ -721,21 +721,13 @@ outside area, into a series of windows.
 
 =head1 ATTRIBUTES
 
-=head2 sw_size
+C<sw_size>          - sliding windows' size, default is 100
 
-sliding windows' size, default is 100
+C<min_interval>     - mininal indel interval length, default is 11
 
-=head2 min_interval
+C<max_out_distance> - maximal outside distance, default is 10
 
-mininal indel interval length, default is 11
-
-=head2 max_out_distance
-
-maximal outside distance, default is 10
-
-=head2 max_in_distance
-
-maximal inside distance, default is 5
+C<max_in_distance>  - maximal inside distance, default is 5
 
 =head1 METHODS
 
