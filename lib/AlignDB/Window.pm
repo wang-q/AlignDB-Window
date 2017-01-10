@@ -145,7 +145,7 @@ sub interval_window {
         $window_info{set}      = $interval_set->slice( $tmp_start, $tmp_end );
         $window_info{distance} = $half_windows_number + 1;
         $window_info{density}  = $density;
-        $window_info{type}     = rand > 0.5 ? "L" : "R";
+        $window_info{type} = "L";    # rand > 0.5 ? "L" : "R";
         push @interval_windows, \%window_info;
     }
     else {
@@ -242,11 +242,11 @@ sub interval_window_2 {
         $tmp_end = $r_start - 1;
     }
 
-    # Special middle windwo:
+    # Special middle window:
     #   Ln or Rn when odd density number
     if ( $density % 2 ) {
         my %window_info;
-        $window_info{type} = rand > 0.5 ? "L" : "R";
+        $window_info{type} = "L";    #rand > 0.5 ? "L" : "R";
         my ( $window_start, $window_end );
         if ( $window_info{type} eq "L" ) {
             $window_start = $tmp_start;
