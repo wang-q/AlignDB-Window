@@ -803,7 +803,8 @@ AlignDB::Window - Split integer spans into a series of windows
 
 =head1 DESCRIPTION
 
-AlignDB::Window provides methods to split integer spans, including interval, inside area and outside area, into a series of windows.
+AlignDB::Window provides methods to split integer spans, including interval, inside area and
+outside area, into a series of windows.
 
 =head1 ATTRIBUTES
 
@@ -825,22 +826,24 @@ maximal inside distance, default is 5
 
 =head1 METHODS
 
+=head2 common parameters
+
+C<$comparable_set> - AlignDB::IntSpan object
+C<$interval_start> - start position in the interval
+C<$interval_end>   - end position in the interval
+C<$sw_size>        - size of windows
+C<$min_interval>   - minimal size of intervals
+
 =head2 interval_window
 
-      Usage : $self->interval_window(
-            :     $comparable_set, $interval_start, $interval_end,
-            :     $sw_size, $min_interval,
-            : );
-    Purpose : split an interval to windows
-            : length of windows are variable, but all positions of
-            :   the interval are counted
-    Returns : @interval_windows
-            : each member is a hash_ref
- Parameters : $comparable_set   : AlignDB::IntSpan object
-            : $interval_start   : start position of the interval
-            : $interval_end     : end position of the interval
-            : $sw_size      : size of windows
-            : $min_interval : minimal size of intervals
+    my @interval_windows = $self->interval_window(
+        $comparable_set, $interval_start, $interval_end,
+        $sw_size, $min_interval,
+    );
+
+Split an interval to windows.
+
+Length of windows are variable, but all positions of the interval are counted.
 
 =head2 interval_window_2
 
