@@ -1,7 +1,11 @@
-use Test::More tests => 1;
+use strict;
+use warnings;
+use Test::More;
 
 BEGIN {
-use_ok( 'AlignDB::Window' );
+    use_ok('AlignDB::Window');
 }
 
-diag( "Testing AlignDB::Window $AlignDB::Window::VERSION" );
+diag("Testing AlignDB::Window $AlignDB::Window::VERSION");
+
+done_testing();
