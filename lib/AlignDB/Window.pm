@@ -191,7 +191,7 @@ sub outside_window {
 
     my @outside_windows;
 
-    foreach my $sw_type (qw/L R/) {
+    for my $sw_type (qw{L R}) {
 
         # $sw_start and $sw_end are both index of $comparable_set
         my ( $sw_start, $sw_end );
@@ -206,7 +206,7 @@ sub outside_window {
         }
 
         # $sw_distance is from 1 to $sw_max_distance
-    OUTSIDESW: foreach my $sw_distance ( 1 .. $maximal_distance ) {
+    OUTSIDESW: for my $sw_distance ( 1 .. $maximal_distance ) {
             last if $sw_start < 1;
             last if $sw_end > $comparable_number;
             my $sw_set = $comparable_set->slice( $sw_start, $sw_end );
@@ -251,7 +251,7 @@ sub outside_window_2 {
 
     my @outside_windows;
 
-    foreach my $sw_type (qw/L R/) {
+    for my $sw_type (qw{L R}) {
 
         # $sw_start and $sw_end are both index of $comparable_set
         my ( $sw_start, $sw_end );
@@ -266,7 +266,7 @@ sub outside_window_2 {
         }
 
         # distance is from 0 to $maximal_distance
-    OUTSIDESW2: foreach my $sw_distance ( 0 .. $maximal_distance ) {
+    OUTSIDESW2: for my $sw_distance ( 0 .. $maximal_distance ) {
             last if $sw_start < 1;
             last if $sw_end > $comparable_number;
             my $sw_set = $comparable_set->slice( $sw_start, $sw_end );
@@ -307,7 +307,7 @@ sub inside_window {
 
     my @inside_windows;
 
-    foreach my $sw_type (qw/l r/) {
+    for my $sw_type (qw{l r}) {
 
         # $sw_start and $sw_end are both index of $comparable_set
         my ( $sw_start, $sw_end );
@@ -330,7 +330,7 @@ sub inside_window {
         my $max_distance = List::Util::min( $available_distance, $maximal_distance );
 
         # sw_distance is from -1 to -max_distance
-    INSIDESW: foreach my $i ( 1 .. $max_distance ) {
+    INSIDESW: for my $i ( 1 .. $max_distance ) {
             my $sw_set = $working_set->slice( $sw_start, $sw_end );
             my $sw_set_member_number = $sw_set->size;
             if ( $sw_set_member_number < $sw_size ) {
@@ -368,11 +368,9 @@ sub inside_window2 {
     $sw_size          ||= $self->sw_size;
     $maximal_distance ||= $self->max_in_distance;
 
-    my $comparable_number = $comparable_set->size;
-
     my @inside_windows;
 
-    foreach my $sw_type (qw/l r/) {
+    for my $sw_type (qw{l r}) {
 
         # $sw_start and $sw_end are both index of $comparable_set
         my ( $sw_start, $sw_end );
@@ -395,7 +393,7 @@ sub inside_window2 {
         my $max_distance = List::Util::min( $available_distance, $maximal_distance );
 
         # sw_distance is from -90 to -90 + max_distance - 1
-    INSIDESW2: foreach my $i ( -90 .. ( -90 + $max_distance - 1 ) ) {
+    INSIDESW2: for my $i ( -90 .. ( -90 + $max_distance - 1 ) ) {
             my $sw_set = $working_set->slice( $sw_start, $sw_end );
             my $sw_set_member_number = $sw_set->size;
             if ( $sw_set_member_number < $sw_size ) {
@@ -638,8 +636,6 @@ sub strand_window {
     # if undefined, set to default values
     $sw_size ||= $self->sw_size;
     $strand  ||= '+';
-
-    my $comparable_number = $comparable_set->size;
 
     my @windows;
 
