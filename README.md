@@ -93,9 +93,9 @@ Draw inside windows from a internal region.
 
 All windows are 100 bp length. Start counting from the edges.
 
-## inside\_window2
+## inside\_window\_2
 
-    my @inside_windows = $self->inside_window2(
+    my @inside_windows = $self->inside_window_2(
         $comparable_set, $interval_start, $interval_end,
         $sw_size, $maximal_distance,
     );

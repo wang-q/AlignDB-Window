@@ -365,7 +365,7 @@ sub inside_window {
     return @inside_windows;
 }
 
-sub inside_window2 {
+sub inside_window_2 {
     my $self = shift;
     my AlignDB::IntSpan $comparable_set = shift;
     my ( $internal_start, $internal_end, $sw_size, $maximal_distance ) = @_;
@@ -804,9 +804,9 @@ Draw inside windows from a internal region.
 
 All windows are 100 bp length. Start counting from the edges.
 
-=head2 inside_window2
+=head2 inside_window_2
 
-    my @inside_windows = $self->inside_window2(
+    my @inside_windows = $self->inside_window_2(
         $comparable_set, $interval_start, $interval_end,
         $sw_size, $maximal_distance,
     );
