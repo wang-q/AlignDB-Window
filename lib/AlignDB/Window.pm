@@ -206,13 +206,13 @@ sub outside_window {
         }
 
         # $sw_distance is from 1 to $sw_max_distance
-    OUTSIDESW: for my $sw_distance ( 1 .. $maximal_distance ) {
+    OSW: for my $sw_distance ( 1 .. $maximal_distance ) {
             last if $sw_start < 1;
             last if $sw_end > $comparable_number;
             my $sw_set = $comparable_set->slice( $sw_start, $sw_end );
             my $sw_set_member_number = $sw_set->size;
             if ( $sw_set_member_number < $sw_size ) {
-                last OUTSIDESW;
+                last OSW;
             }
 
             my %window_info;
@@ -266,13 +266,13 @@ sub outside_window_2 {
         }
 
         # distance is from 0 to $maximal_distance
-    OUTSIDESW2: for my $sw_distance ( 0 .. $maximal_distance ) {
+    OSW2: for my $sw_distance ( 0 .. $maximal_distance ) {
             last if $sw_start < 1;
             last if $sw_end > $comparable_number;
             my $sw_set = $comparable_set->slice( $sw_start, $sw_end );
             my $sw_set_member_number = $sw_set->size;
             if ( $sw_set_member_number < $sw_size ) {
-                last OUTSIDESW2;
+                last OSW2;
             }
 
             my %window_info;
@@ -330,11 +330,11 @@ sub inside_window {
         my $max_distance = List::Util::min( $available_distance, $maximal_distance );
 
         # sw_distance is from -1 to -max_distance
-    INSIDESW: for my $i ( 1 .. $max_distance ) {
+    ISW: for my $i ( 1 .. $max_distance ) {
             my $sw_set = $working_set->slice( $sw_start, $sw_end );
             my $sw_set_member_number = $sw_set->size;
             if ( $sw_set_member_number < $sw_size ) {
-                last INSIDESW;
+                last ISW;
             }
             my $sw_distance = -$i;
 
@@ -393,11 +393,11 @@ sub inside_window2 {
         my $max_distance = List::Util::min( $available_distance, $maximal_distance );
 
         # sw_distance is from -90 to -90 + max_distance - 1
-    INSIDESW2: for my $i ( -90 .. ( -90 + $max_distance - 1 ) ) {
+    ISW2: for my $i ( -90 .. ( -90 + $max_distance - 1 ) ) {
             my $sw_set = $working_set->slice( $sw_start, $sw_end );
             my $sw_set_member_number = $sw_set->size;
             if ( $sw_set_member_number < $sw_size ) {
-                last INSIDESW2;
+                last ISW2;
             }
             my $sw_distance = $i;
 
@@ -473,13 +473,13 @@ sub center_window {
         }
 
         # $sw_distance is from 1 to $maximal_distance
-    CENTERSW: for my $sw_distance ( 1 .. $maximal_distance ) {
+    CSW: for my $sw_distance ( 1 .. $maximal_distance ) {
             last if $sw_start < 1;
             last if $sw_end > $comparable_number;
             my $sw_set = $comparable_set->slice( $sw_start, $sw_end );
             my $sw_set_member_number = $sw_set->size;
             if ( $sw_set_member_number < $sw_size ) {
-                last CENTERSW;
+                last CSW;
             }
 
             push @center_windows,
@@ -598,13 +598,13 @@ sub center_intact_window {
         }
 
         # $sw_distance is from 1 to $maximal_distance
-    CENTERINTACTSW: for my $sw_distance ( 1 .. $maximal_distance ) {
+    CISW: for my $sw_distance ( 1 .. $maximal_distance ) {
             last if $sw_start < 1;
             last if $sw_end > $comparable_number;
             my $sw_set = $comparable_set->slice( $sw_start, $sw_end );
             my $sw_set_member_number = $sw_set->size;
             if ( $sw_set_member_number < $sw_size ) {
-                last CENTERINTACTSW;
+                last CISW;
             }
 
             push @center_windows,
@@ -668,11 +668,11 @@ sub strand_window {
     my $available_distance = int( $working_length / ($sw_size) );
 
     # sw_distance is from 1 to max_distance
-STRANDSW: for my $i ( 1 .. $available_distance ) {
+SSW: for my $i ( 1 .. $available_distance ) {
         my $sw_set = $working_set->slice( $sw_start, $sw_end );
         my $sw_set_member_number = $sw_set->size;
         if ( $sw_set_member_number < $sw_size ) {
-            last STRANDSW;
+            last SSW;
         }
         my $sw_distance = $i;
 
@@ -807,7 +807,7 @@ All windows are 100 bp length. Start counting from the center.
 
 =head2 center_window
 
-    my @outside_windows = $self->outside_window_2(
+    my @center_windows = $self->center_window(
         $comparable_set, $interval_start, $interval_end,
         $sw_size, $maximal_distance,
     );
@@ -819,7 +819,7 @@ Start from 0 and end to $maximal_distance.
 
 =head2 center_intact_window
 
-    my @outside_windows = $self->outside_window_2(
+    my @center_intact_windows = $self->center_intact_window(
         $comparable_set, $interval_start, $interval_end,
         $sw_size, $maximal_distance,
     );
