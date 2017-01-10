@@ -30,11 +30,19 @@ maximal inside distance, default is 5
 
 ## common parameters
 
-`$comparable_set` - AlignDB::IntSpan object
-`$interval_start` - start position in the interval
-`$interval_end`   - end position in the interval
-`$sw_size`        - size of windows
-`$min_interval`   - minimal size of intervals
+`$comparable_set`      - AlignDB::IntSpan object
+
+`$interval_start`      - start position in the interval
+
+`$interval_end`        - end position in the interval
+
+`$sw_size`             - size of windows
+
+`$min_interval`        - minimal size of intervals
+
+`$maximal_distance`    - maximal distance
+
+`$strand`              - '+' or '-'
 
 ## interval\_window
 
@@ -49,136 +57,92 @@ Length of windows are variable, but all positions of the interval are counted.
 
 ## interval\_window\_2
 
-         Usage : $self->interval_window_2(
-               :     $comparable_set, $interval_start, $interval_end,
-               :     $sw_size, $min_interval,
-               : );
-       Purpose : split an interval to windows
-               : all windows are 100 bp length
-       Returns : @interval_windows
-               : each member is a hash_ref
-    Parameters : $comparable_set   : AlignDB::IntSpan object
-               : $interval_start   : start position of the interval
-               : $interval_end     : end position of the interval
-               : $sw_size      : size of windows
-               : $min_interval : minimal size of intervals
+    my @interval_windows = $self->interval_window_2(
+        $comparable_set, $interval_start, $interval_end,
+        $sw_size, $min_interval,
+    );
+
+Split an interval to windows.
+
+All windows are 100 bp length.
 
 ## outside\_window
 
-         Usage : $self->outside_window(
-               :     $comparable_set, $interval_start, $interval_end,
-               :     $sw_size, $maximal_distance,
-               : );
-       Purpose : draw outside windows from a internal region
-               : all windows are 100 bp length
-               : start from 1 and end to $maximal_distance
-       Returns : @outside_windows
-               : each member is a hash_ref
-    Parameters : $comparable_set   : AlignDB::IntSpan object
-               : $interval_start   : start position of the interval
-               : $interval_end     : end position of the interval
-               : $sw_size      : size of windows
-               : $maximal_distance : maximal distance
+    my @outside_windows = $self->outside_window(
+        $comparable_set, $interval_start, $interval_end,
+        $sw_size, $maximal_distance,
+    );
+
+Draw outside windows from a internal region.
+
+All windows are 100 bp length. Start from 1 and end to $maximal\_distance.
 
 ## outside\_window\_2
 
-         Usage : $self->outside_window_2(
-               :     $comparable_set, $interval_start, $interval_end,
-               :     $sw_size, $maximal_distance,
-               : );
-       Purpose : draw outside windows from a internal region
-               : the first window is 50 bp and all others are 100 bp length
-               : start from 0 and end to $maximal_distance
-       Returns : @outside_windows
-               : each member is a hash_ref
-    Parameters : $comparable_set   : AlignDB::IntSpan object
-               : $interval_start   : start position of the interval
-               : $interval_end     : end position of the interval
-               : $sw_size      : size of windows
-               : $maximal_distance : maximal distance
+    my @outside_windows = $self->outside_window_2(
+        $comparable_set, $interval_start, $interval_end,
+        $sw_size, $maximal_distance,
+    );
+
+Draw outside windows from a internal region.
+
+The first window is 50 bp and all others are 100 bp length.
+Start from 0 and end to $maximal\_distance.
 
 ## inside\_window
 
-         Usage : $self->inside_window(
-               :     $comparable_set, $interval_start, $interval_end,
-               :     $sw_size, $maximal_distance,
-               : );
-       Purpose : draw inside windows from a internal region
-               : all windows are 100 bp length
-               : start counting from the edges
-       Returns : @inside_windows
-               : each member is a hash_ref
-    Parameters : $comparable_set   : AlignDB::IntSpan object
-               : $interval_start   : start position of the interval
-               : $interval_end     : end position of the interval
-               : $sw_size      : size of windows
-               : $maximal_distance : maximal distance
+    my @inside_windows = $self->inside_window(
+        $comparable_set, $interval_start, $interval_end,
+        $sw_size, $maximal_distance,
+    );
+
+Draw inside windows from a internal region.
+
+All windows are 100 bp length. Start counting from the edges.
 
 ## inside\_window2
 
-         Usage : $self->inside_window2(
-               :     $comparable_set, $interval_start, $interval_end,
-               :     $sw_size, $maximal_distance,
-               : );
-       Purpose : draw inside windows from a internal region
-               : all windows are 100 bp length
-               : start counting from the center
-       Returns : @inside_windows
-               : each member is a hash_ref
-    Parameters : $comparable_set   : AlignDB::IntSpan object
-               : $interval_start   : start position of the interval
-               : $interval_end     : end position of the interval
-               : $sw_size      : size of windows
-               : $maximal_distance : maximal distance
+    my @inside_windows = $self->inside_window2(
+        $comparable_set, $interval_start, $interval_end,
+        $sw_size, $maximal_distance,
+    );
+
+Draw inside windows from a internal region.
+
+All windows are 100 bp length. Start counting from the center.
 
 ## center\_window
 
-         Usage : $self->outside_window_2(
-               :     $comparable_set, $interval_start, $interval_end,
-               :     $sw_size, $maximal_distance,
-               : );
-       Purpose : draw windows for a certain region, center is 0, and
-               : the first window is 50 bp and all others are 100 bp length
-               : start from 0 and end to $maximal_distance
-       Returns : @outside_windows
-               : each member is a hash_ref
-    Parameters : $comparable_set   : AlignDB::IntSpan object
-               : $interval_start   : start position of the interval
-               : $interval_end     : end position of the interval
-               : $sw_size      : size of windows
-               : $maximal_distance : maximal distance
+    my @outside_windows = $self->outside_window_2(
+        $comparable_set, $interval_start, $interval_end,
+        $sw_size, $maximal_distance,
+    );
+
+Draw windows for a certain region.
+
+Center is 0, and the first window is 50 bp and all others are 100 bp length.
+Start from 0 and end to $maximal\_distance.
 
 ## center\_intact\_window
 
-         Usage : $self->outside_window_2(
-               :     $comparable_set, $interval_start, $interval_end,
-               :     $sw_size, $maximal_distance,
-               : );
-       Purpose : draw windows for a certain region, center is 0, and
-               : the first window is 50 bp and all others are 100 bp length
-               : start from 0 and end to $maximal_distance
-       Returns : @outside_windows
-               : each member is a hash_ref
-    Parameters : $comparable_set   : AlignDB::IntSpan object
-               : $interval_start   : start position of the interval
-               : $interval_end     : end position of the interval
-               : $sw_size      : size of windows
-               : $maximal_distance : maximal distance
+    my @outside_windows = $self->outside_window_2(
+        $comparable_set, $interval_start, $interval_end,
+        $sw_size, $maximal_distance,
+    );
+
+Draw windows for a certain region.
+
+Center is 0, and the first window is 50 bp and all others are 100 bp length.
+Start from 0 and end to $maximal\_distance.
 
 ## strand\_window
 
-         Usage : $self->strand_window(
-               :     $comparable_set, $interval_start, $interval_end,
-               :     $sw_size, $strand,
-               : );
-       Purpose : draw windows for a certain region
-       Returns : @windows
-               : each member is a hash_ref
-    Parameters : $comparable_set   : AlignDB::IntSpan object
-               : $interval_start   : start position of the interval
-               : $interval_end     : end position of the interval
-               : $sw_size      : size of windows
-               : $strand           : '+' or '-'
+    my @windows = $self->strand_window(
+        $comparable_set, $interval_start, $interval_end,
+        $sw_size, $strand,
+    );
+
+Draw windows for a certain region
 
 # AUTHOR
 
