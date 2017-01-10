@@ -15,7 +15,7 @@ use AlignDB::Window;
         [ [ AlignDB::IntSpan->new->add_pair( 1, 9999 ), 500, 500 ], [], ],
         [   [ AlignDB::IntSpan->new->add_pair( 1, 9999 ), 500, 600, 100, "-" ],
             [   {   distance => 1,
-                    set      => "500-599",
+                    set      => "501-600",
                     type     => "-",
                 }
             ],
