@@ -178,95 +178,6 @@ sub interval_window {
     return @interval_windows;
 }
 
-sub interval_window_2 {
-    my $self = shift;
-    my AlignDB::IntSpan $comparable_set = shift;
-    my ( $interval_start, $interval_end, $sw_size, $min_interval ) = @_;
-
-    # if undefined, set to default values
-    $sw_size      ||= $self->sw_size;
-    $min_interval ||= $self->min_interval;
-
-    my $interval_set = AlignDB::IntSpan->new("$interval_start-$interval_end");
-    $interval_set = $interval_set->intersect($comparable_set);
-    my $interval_length = $interval_set->size;
-
-    my $density = int( $interval_length / $sw_size );
-
-    # used for mark windows
-    my ( $tmp_start, $tmp_end ) = ( 1, $interval_length );
-
-    my @interval_windows;
-
-    # More windows will be submitted in the following for-loop and if section
-    if ( $interval_length < $min_interval ) {
-        return @interval_windows;
-    }
-    elsif ( $interval_length < 2 * $sw_size ) {
-
-        # $interval_length between $min_interval and 199 bp
-        my %window_info;
-        $window_info{set}      = $interval_set;
-        $window_info{distance} = 0;
-        $window_info{density}  = $density;
-        $window_info{type}     = 'S';
-        push @interval_windows, \%window_info;
-
-        return @interval_windows;
-    }
-
-    # regular 100 bp windows
-    my $half_windows_number = int( ( $density - 1 ) / 2 );
-    for my $i ( 1 .. $half_windows_number ) {
-
-        # left windows
-        my %l_window_info;
-        my $l_start = $tmp_start;
-        my $l_end   = $l_start + $sw_size - 1;
-        $l_window_info{set}      = $interval_set->slice( $l_start, $l_end );
-        $l_window_info{distance} = $i;
-        $l_window_info{density}  = $density;
-        $l_window_info{type}     = 'L';
-        push @interval_windows, \%l_window_info;
-        $tmp_start = $l_end + 1;
-
-        # right windows
-        my %r_window_info;
-        my $r_end   = $tmp_end;
-        my $r_start = $r_end - $sw_size + 1;
-        $r_window_info{set}      = $interval_set->slice( $r_start, $r_end );
-        $r_window_info{distance} = $i;
-        $r_window_info{density}  = $density;
-        $r_window_info{type}     = 'R';
-        push @interval_windows, \%r_window_info;
-        $tmp_end = $r_start - 1;
-    }
-
-    # Special middle window:
-    #   Ln or Rn when odd density number
-    if ( $density % 2 ) {
-        my %window_info;
-        $window_info{type} = "L";    #rand > 0.5 ? "L" : "R";
-        my ( $window_start, $window_end );
-        if ( $window_info{type} eq "L" ) {
-            $window_start = $tmp_start;
-            $window_end   = $window_start + $sw_size - 1;
-        }
-        else {
-            $window_end   = $tmp_end;
-            $window_start = $window_end - $sw_size + 1;
-        }
-
-        $window_info{set}      = $interval_set->slice( $window_start, $window_end );
-        $window_info{distance} = $half_windows_number + 1;
-        $window_info{density}  = $density;
-
-        push @interval_windows, \%window_info;
-    }
-
-    return @interval_windows;
-}
-
 sub outside_window {
     my $self = shift;
     my AlignDB::IntSpan $comparable_set = shift;
@@ -852,17 +763,6 @@ C<$strand>              - '+' or '-'
 Split an interval to windows.
 
 Length of windows are variable, but all positions of the interval are counted.
-
-=head2 interval_window_2
-
-    my @interval_windows = $self->interval_window_2(
-        $comparable_set, $interval_start, $interval_end,
-        $sw_size, $min_interval,
-    );
-
-Split an interval to windows.
-
-All windows are 100 bp length.
 
 =head2 outside_window
 

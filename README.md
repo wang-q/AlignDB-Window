@@ -55,17 +55,6 @@ Split an interval to windows.
 
 Length of windows are variable, but all positions of the interval are counted.
 
-## interval\_window\_2
-
-    my @interval_windows = $self->interval_window_2(
-        $comparable_set, $interval_start, $interval_end,
-        $sw_size, $min_interval,
-    );
-
-Split an interval to windows.
-
-All windows are 100 bp length.
-
 ## outside\_window
 
     my @outside_windows = $self->outside_window(
