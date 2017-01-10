@@ -271,7 +271,13 @@ sub outside_window_2 {
             last if $sw_end > $comparable_number;
             my $sw_set = $comparable_set->slice( $sw_start, $sw_end );
             my $sw_set_member_number = $sw_set->size;
-            if ( $sw_set_member_number < $sw_size ) {
+            if ( $sw_set_member_number < $window0_size ) {
+
+                #                warn YAML::Syck::Dump {
+                #                    sw_type  => $sw_type,
+                #                    sw_start => $sw_start,
+                #                    sw_end   => $sw_end,
+                #                };
                 last OSW2;
             }
 
@@ -737,9 +743,13 @@ maximal inside distance, default is 5
 
 C<$comparable_set>      - AlignDB::IntSpan object
 
-C<$interval_start>      - start position in the interval
+C<$interval_start>      - start point of the interval
 
-C<$interval_end>        - end position in the interval
+C<$interval_end>        - end point in the interval
+
+C<$internal_start>      - start position in the internal region
+
+C<$internal_end>        - end position in the internal region
 
 C<$sw_size>             - size of windows
 
@@ -763,7 +773,7 @@ Length of windows are variable, but all positions of the interval are counted.
 =head2 outside_window
 
     my @outside_windows = $self->outside_window(
-        $comparable_set, $interval_start, $interval_end,
+        $comparable_set, $internal_start, $internal_end,
         $sw_size, $maximal_distance,
     );
 
@@ -774,7 +784,7 @@ All windows are 100 bp length. Start from 1 and end to $maximal_distance.
 =head2 outside_window_2
 
     my @outside_windows = $self->outside_window_2(
-        $comparable_set, $interval_start, $interval_end,
+        $comparable_set, $internal_start, $internal_end,
         $sw_size, $maximal_distance,
     );
 

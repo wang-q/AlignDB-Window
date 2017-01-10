@@ -32,9 +32,13 @@ maximal inside distance, default is 5
 
 `$comparable_set`      - AlignDB::IntSpan object
 
-`$interval_start`      - start position in the interval
+`$interval_start`      - start point of the interval
 
-`$interval_end`        - end position in the interval
+`$interval_end`        - end point in the interval
+
+`$internal_start`      - start position in the internal region
+
+`$internal_end`        - end position in the internal region
 
 `$sw_size`             - size of windows
 
@@ -58,7 +62,7 @@ Length of windows are variable, but all positions of the interval are counted.
 ## outside\_window
 
     my @outside_windows = $self->outside_window(
-        $comparable_set, $interval_start, $interval_end,
+        $comparable_set, $internal_start, $internal_end,
         $sw_size, $maximal_distance,
     );
 
@@ -69,7 +73,7 @@ All windows are 100 bp length. Start from 1 and end to $maximal\_distance.
 ## outside\_window\_2
 
     my @outside_windows = $self->outside_window_2(
-        $comparable_set, $interval_start, $interval_end,
+        $comparable_set, $internal_start, $internal_end,
         $sw_size, $maximal_distance,
     );
 
@@ -102,7 +106,7 @@ All windows are 100 bp length. Start counting from the center.
 
 ## center\_window
 
-    my @outside_windows = $self->outside_window_2(
+    my @center_windows = $self->center_window(
         $comparable_set, $interval_start, $interval_end,
         $sw_size, $maximal_distance,
     );
@@ -114,7 +118,7 @@ Start from 0 and end to $maximal\_distance.
 
 ## center\_intact\_window
 
-    my @outside_windows = $self->outside_window_2(
+    my @center_intact_windows = $self->center_intact_window(
         $comparable_set, $interval_start, $interval_end,
         $sw_size, $maximal_distance,
     );
