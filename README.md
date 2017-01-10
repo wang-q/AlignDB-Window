@@ -10,21 +10,13 @@ outside area, into a series of windows.
 
 # ATTRIBUTES
 
-## sw\_size
+`sw_size`          - sliding windows' size, default is 100
 
-sliding windows' size, default is 100
+`min_interval`     - mininal indel interval length, default is 11
 
-## min\_interval
+`max_out_distance` - maximal outside distance, default is 10
 
-mininal indel interval length, default is 11
-
-## max\_out\_distance
-
-maximal outside distance, default is 10
-
-## max\_in\_distance
-
-maximal inside distance, default is 5
+`max_in_distance`  - maximal inside distance, default is 5
 
 # METHODS
 
@@ -107,7 +99,7 @@ All windows are 100 bp length. Start counting from the center.
 ## center\_window
 
     my @center_windows = $self->center_window(
-        $comparable_set, $interval_start, $interval_end,
+        $comparable_set, $internal_start, $internal_end,
         $sw_size, $maximal_distance,
     );
 
@@ -119,7 +111,7 @@ Start from 0 and end to $maximal\_distance.
 ## center\_intact\_window
 
     my @center_intact_windows = $self->center_intact_window(
-        $comparable_set, $interval_start, $interval_end,
+        $comparable_set, $internal_start, $internal_end,
         $sw_size, $maximal_distance,
     );
 

@@ -2,6 +2,12 @@ Revision history for AlignDB-Window
 
 {{$NEXT}}
 
+1.1.0 2017-01-10T19:19:55Z
+    - Release to CPAN
+    - Improve test coverage
+    - Improve docs
+    - Travis CI
+
 1.0.1 2016-12-16T00:35:14Z
     - Switch to Minilla
 

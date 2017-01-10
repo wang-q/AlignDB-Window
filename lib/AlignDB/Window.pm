@@ -6,7 +6,7 @@ use List::Util;
 use YAML::Syck;
 use AlignDB::IntSpan;
 
-our $VERSION = '1.0.1';
+our $VERSION = '1.1.0';
 
 has 'sw_size'          => ( is => 'rw', isa => 'Int', default => sub {100}, );
 has 'min_interval'     => ( is => 'rw', isa => 'Int', default => sub {11}, );
