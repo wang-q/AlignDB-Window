@@ -12,6 +12,7 @@ use AlignDB::Window;
     my $maker = AlignDB::Window->new;
 
     my @data = (
+        [ [ AlignDB::IntSpan->new->add_pair( 1, 10 ), 1, 99 ], [], ],
         [   [ AlignDB::IntSpan->new->add_pair( 1, 99 ), 1, 99 ],
             [   {   density  => -1,
                     distance => -1,
@@ -28,6 +29,50 @@ use AlignDB::Window;
                 },
             ],
         ],
+        [   [ AlignDB::IntSpan->new->add_pair( 1, 100 ), 1, 9999 ],
+            [   {   density  => 0,
+                    distance => 0,
+                    set      => "1-50",
+                    type     => "L",
+                },
+                {   density  => 0,
+                    distance => 0,
+                    set      => "51-100",
+                    type     => "R",
+                },
+            ],
+        ],
+        [   [ AlignDB::IntSpan->new->add_pair( 1, 111 ), 1, 9999 ],
+            [   {   density  => 0,
+                    distance => 0,
+                    set      => "1-56",
+                    type     => "L",
+                },
+                {   density  => 0,
+                    distance => 0,
+                    set      => "57-111",
+                    type     => "R",
+                },
+            ],
+        ],
+        [   [ AlignDB::IntSpan->new->add_pair( 1, 200 ), 1, 9999 ],
+            [   {   density  => 1,
+                    distance => 0,
+                    set      => "1-50",
+                    type     => "L",
+                },
+                {   density  => 1,
+                    distance => 0,
+                    set      => "151-200",
+                    type     => "R",
+                },
+                {   density  => 1,
+                    distance => 1,
+                    set      => "51-150",
+                    type     => "L",
+                },
+            ],
+        ],
     );
 
     for my $i ( 0 .. $#data ) {
@@ -35,7 +80,6 @@ use AlignDB::Window;
 
         my @results = $maker->interval_window( @{$input_ref} );
         $_->{set} = $_->{set}->runlist for @results;
-#        print YAML::Syck::Dump \@results;
         is_deeply( \@results, $except_ref, "interval window $i" );
     }
 }
