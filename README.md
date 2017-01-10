@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/wang-q/AlignDB-Window.svg?branch=master)](https://travis-ci.org/wang-q/AlignDB-Window) [![Coverage Status](http://codecov.io/github/wang-q/AlignDB-Window/coverage.svg?branch=master)](https://codecov.io/github/wang-q/AlignDB-Window?branch=master) [![MetaCPAN Release](https://badge.fury.io/pl/AlignDB-Window.svg)](https://metacpan.org/release/AlignDB-Window)
 # NAME
 
 AlignDB::Window - Split integer spans into a series of windows
