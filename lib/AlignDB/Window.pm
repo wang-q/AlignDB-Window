@@ -810,7 +810,7 @@ All windows are 100 bp length. Start counting from the center.
 =head2 center_window
 
     my @center_windows = $self->center_window(
-        $comparable_set, $interval_start, $interval_end,
+        $comparable_set, $internal_start, $internal_end,
         $sw_size, $maximal_distance,
     );
 
@@ -822,7 +822,7 @@ Start from 0 and end to $maximal_distance.
 =head2 center_intact_window
 
     my @center_intact_windows = $self->center_intact_window(
-        $comparable_set, $interval_start, $interval_end,
+        $comparable_set, $internal_start, $internal_end,
         $sw_size, $maximal_distance,
     );
 
