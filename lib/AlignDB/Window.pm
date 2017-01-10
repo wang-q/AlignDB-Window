@@ -1,7 +1,7 @@
 package AlignDB::Window;
 use Moose;
 use List::Util qw(first max maxstr min minstr reduce shuffle sum);
-use YAML qw(Dump Load DumpFile LoadFile);
+use YAML::Syck;
 use AlignDB::IntSpan;
 
 our $VERSION = '1.0.1';

@@ -1,6 +1,6 @@
 requires 'Moose';
 requires 'List::Util';
-requires 'YAML';
+requires 'YAML::Syck';
 requires 'AlignDB::IntSpan';
 requires 'perl', '5.008001';
 
